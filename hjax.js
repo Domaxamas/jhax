@@ -56,15 +56,22 @@ function hjax(url, options, callback) {
 		return;
 	}
 
+	// Add default options
+	options.headers		= options.headers	|| {};
+	options.method		= options.method	|| "GET";
+	options.username	= options.username	|| "";
+	options.password	= options.password	|| "";
+	options.parseJSON	= options.parseJSON	|| true;
+	options.data		= options.data		|| "";
+
 	// Stringify data
-	if (typeof data === "object") {
+	if (typeof options.data === "object") {
 		options.log(me, "stringifying data");
-		postString = "";
-		for (key in data) {
+		for (key in options.data) {
 			if (postString !== "") {
 				postString += "&";
 			}
-		    postString += key + "=" + data[key];
+			postString += key + "=" + data[key];
 		}
 		// Cut off leading &:
 		//postString = postString.substring(1);
@@ -72,18 +79,12 @@ function hjax(url, options, callback) {
 		// I suspect there's a crossover point here, where large objects
 		// become slower than substringing after the loop
 
-	} else if (typeof data !== "string") {
+	} else if (typeof options.data !== "string") {
 		callback("cannot stringify data");
 		return;
+	} else {
+		postString = options.data;
 	}
-
-	// Add default options
-	options.headers		= options.headers	|| {};
-	options.method		= options.method	|| "GET";
-	options.username	= options.username	|| "";
-	options.password	= options.password	|| "";
-	options.data		= options.data		|| "";
-	options.parseJSON	= options.parseJSON	|| true;
 
 	// Set default logger if boolean sent,
 	// else ensure is function or off
@@ -171,6 +172,6 @@ function hjax(url, options, callback) {
 	};
 
 	// Send the request, along with any post data
-	options.log(me, "xhr.send", options.data);
-	xhr.send(options.data);
+	options.log(me, "xhr.send", postString);
+	xhr.send(postString);
 }
