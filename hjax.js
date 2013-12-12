@@ -65,6 +65,7 @@ function hjax(url, options, callback) {
 	options.data		= options.data		|| "";
 
 	// Stringify data
+	postString = "";
 	if (typeof options.data === "object") {
 		options.log(me, "stringifying data");
 		for (key in options.data) {
