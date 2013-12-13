@@ -177,4 +177,7 @@ function hjax(url, options, callback) {
 	// Send the request, along with any post data
 	options.log(me, "xhr.send", postString);
 	xhr.send(postString);
+
+	// Return the xhr object in case developer needs to call .abort etc
+	return xhr;
 }
